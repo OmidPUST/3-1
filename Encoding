@@ -1,0 +1,171 @@
+import numpy as np
+from matplotlib import pyplot as plt
+
+#Unipolar
+
+
+
+data = np.random.randint(0,2,25)
+time = np.arange(len(data))
+plt.subplot(2,3,1)      
+
+
+plt.step(time, data,where='post')
+plt.title('Unipolar')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+
+plt.text(0, 2, data)
+
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(time)
+
+
+
+#NRZL
+
+data = np.random.randint(0,2,10)
+time = np.arange(len(data))
+signal = np.zeros(len(data), dtype = int)
+for i in range(len(data)):
+    if data[i] == 0:
+        signal[i] = -1
+    else:
+        signal[i] = 1
+    
+plt.subplot(2,3,2)      
+
+plt.step(time, signal,where='post')
+plt.title('NRZ-L')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+plt.text(0, 2, data)
+
+# plt.text(3, 8)
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(time)
+
+#NRZI
+
+# data = np.random.randint(0,2,10)
+data = [1,0,1,1,0,0,1,0,1,0]
+time = np.arange(len(data))
+signal = np.zeros(len(data), dtype = int)
+flg = True
+for i in range(len(data)):
+    if data[i] == 1:
+        flg = not flg
+    if flg:
+        signal[i] = 1
+    else:
+        signal[i] = -1
+plt.subplot(2,3,3)      
+
+plt.step(time, signal,where='post')
+plt.title('NRZ-I')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+plt.text(0, 2, data)
+
+# plt.text(3, 8)
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(time)
+
+
+
+# RZ
+data = np.random.randint(0,2,15)
+time = np.linspace(0,len(data),len(data)*2)
+signal = np.zeros(2*len(data), dtype = int)
+
+for i in range(0,2*len(data),2):
+    if data[i//2] == 1:
+       signal[i] = 1
+    else:
+        signal[i] = -1
+    signal[i+1] = 0
+    
+plt.subplot(2,3,4)      
+plt.step(time, signal,where='post')
+plt.title('RZ')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+plt.text(0, 2, data)
+# plt.text(3, 8)
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(np.arange(len(data)))
+
+
+#Manchester
+
+data = np.random.randint(0,2,10)
+time_org = np.arange(len(data))
+signal = np.zeros(len(data)*2, dtype = int)
+
+for i in range(0,len(data)*2,2):
+    if data[i//2] == 0:
+        signal[i] = 1
+        signal[i+1] = -1
+    else:
+        signal[i] = -1
+        signal[i+1] = 1
+
+
+print(signal)
+time = np.arange(len(signal))
+plt.subplot(2,3,5)      
+
+plt.step(time, signal,where='post')
+plt.title('Manchestor')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+plt.text(0, 2, data)
+
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(time_org*2)
+
+
+#Differential Manchester
+
+data = np.random.randint(0,2,10)
+time_org = np.arange(len(data))
+signal = np.zeros(len(data)*2, dtype = int)
+
+start = False
+for i in range(0,len(data)*2,2):
+    if start:
+        if data[i//2] == 0:
+            signal[i] =  -1*signal[i-1]
+            signal[i+1] = signal[i-1]
+        else:
+            signal[i] = signal[i-1]
+            signal[i+1] = -1* signal[i-1]
+    else:
+        start = True
+        if data[i//2] == 0:
+            signal[i] = -1
+            signal[i+1] = 1
+        else:
+            signal[i] = 1
+            signal[i+1] = -1
+
+
+print(signal)
+plt.subplot(2,3,6)      
+
+time = np.arange(len(signal))
+plt.step(time, signal,where='post')
+plt.title('Differential Manchestor')
+plt.xlabel('Amplitude')
+plt.ylabel('Time')
+plt.text(0, 2, data)
+
+plt.grid(True)
+plt.yticks([-2,-1,0,1,2,3])
+plt.xticks(time_org*2)
+plt.show()
